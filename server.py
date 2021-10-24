@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-
 import socket       #It's module for work with socket
 import time         #It's module for work with time
 
+
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.bind(('', 7777))
+    server.bind(('192.168.0.254', 7777))
     server.listen(1)
 
     conn, addr = server.accept()
@@ -41,9 +41,10 @@ def main():
 
                 with open(filename, 'wb') as file:
                     while True:
-                        text = conn.recv(2048)
+                        text = conn.recv(1228800000)
 
-                        if text == b'ST0P':
+                        if text == b'ST0P_syka_blyat':
+                            file.close()
                             break
                         else:
                             file.write(text)
@@ -54,12 +55,17 @@ def main():
                 send_data(command)
 
                 with open(filename, 'rb') as file:
-                    content = file.read(2048)
-                    conn.send(content)
-                    print(content)
-                    time.sleep(1)
+                    while file:
+                        content = file.read(1228800000)
 
-                    conn.send('ST0P'.encode())
+                        if not content:
+                            file.close()
+                            break
+                        else:
+                            conn.send(content)
+                            time.sleep(1)
+
+                conn.send('ST0P_syka_blyat'.encode())
 
             elif 'q' in command:
                 send_data('q')
